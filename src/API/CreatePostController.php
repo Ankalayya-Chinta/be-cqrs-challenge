@@ -29,7 +29,18 @@ class CreatePostController
             id: $payload['id'] ?? (string)Uuid::v4(),
             title: $payload['title'],
             summary: $payload['summary'],
+            description: $payload['description'], // Feature #1
         );
+
+         // Feature #2
+         if (strpos($payload['title'], 'Qwerty') === 0) {
+            return new JsonResponse(
+                [
+                    'error' => 'Title cannot start with "Qwerty"',
+                ],
+                Response::HTTP_BAD_REQUEST,
+            );
+        }
 
         try {
             $this->commandBus->dispatch(
